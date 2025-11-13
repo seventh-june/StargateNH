@@ -3,12 +3,15 @@ package com.gtnewhorizons.stargatenh;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.gtnewhorizons.stargatenh.common.tileentity.TileStargateController;
+
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 @Mod(modid = StargateNH.MODID, version = Tags.VERSION, name = "StargateNH", acceptedMinecraftVersions = "[1.7.10]")
 public class StargateNH {
@@ -28,6 +31,7 @@ public class StargateNH {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
+        GameRegistry.registerTileEntity(TileStargateController.class, "TileEntityStargateControllerNH");
         proxy.init(event);
     }
 
