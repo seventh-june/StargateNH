@@ -8,15 +8,21 @@ import com.cleanroommc.modularui.drawable.DynamicDrawable;
 import com.cleanroommc.modularui.factory.PosGuiData;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.screen.UISettings;
+import com.cleanroommc.modularui.value.sync.BooleanSyncValue;
 import com.cleanroommc.modularui.value.sync.IntSyncValue;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
+import com.cleanroommc.modularui.widgets.ButtonWidget;
 import com.cleanroommc.modularui.widgets.CycleButtonWidget;
 import com.cleanroommc.modularui.widgets.layout.Row;
-import com.gtnewhorizons.stargatenh.client.ui.SigilIcons;
+import com.gtnewhorizon.gtnhlib.blockpos.BlockPos;
+import com.gtnewhorizons.stargatenh.client.ui.UITextures;
+import com.gtnewhorizons.stargatenh.common.util.StargateAddress;
+import com.gtnewhorizons.stargatenh.common.util.StargateRegistry;
 
 public class TileDialingDevice extends TileEntity implements IGuiHolder<PosGuiData> {
 
     private final int[] address = { 0, 0, 0, 0, 0, 0, 0 };
+    private boolean hasAddress = false;
     TileStargateController controller;
 
     public void connectGate() {
@@ -37,7 +43,17 @@ public class TileDialingDevice extends TileEntity implements IGuiHolder<PosGuiDa
                     .marginRight(5)
                     .marginTop(5)
                     .marginBottom(-15));
+        } else if (hasAddress) {
+            panel.child(
+                IKey.str("Stargate operational.")
+                    .asWidget()
+                    .marginLeft(5)
+                    .marginRight(5)
+                    .marginTop(5)
+                    .marginBottom(-15));
         } else {
+            StargateRegistry reg = StargateRegistry.get(worldObj);
+            BooleanSyncValue isUnique = new BooleanSyncValue(() -> reg.lookup(new StargateAddress(address)) == null);
 
             IntSyncValue chevron1 = new IntSyncValue(() -> address[0], i -> address[0] = i);
             IntSyncValue chevron2 = new IntSyncValue(() -> address[1], i -> address[1] = i);
@@ -47,6 +63,7 @@ public class TileDialingDevice extends TileEntity implements IGuiHolder<PosGuiDa
             IntSyncValue chevron6 = new IntSyncValue(() -> address[5], i -> address[5] = i);
             IntSyncValue chevron7 = new IntSyncValue(() -> address[6], i -> address[6] = i);
 
+            syncManager.syncValue("isUnique", isUnique);
             syncManager.syncValue("chevron1", chevron1);
             syncManager.syncValue("chevron2", chevron2);
             syncManager.syncValue("chevron3", chevron3);
@@ -73,53 +90,81 @@ public class TileDialingDevice extends TileEntity implements IGuiHolder<PosGuiDa
             sigils.child(
                 new CycleButtonWidget().syncHandler("chevron1")
                     .size(16, 16)
-                    .background(SigilIcons.SIGIL_BG)
-                    .hoverBackground(SigilIcons.SIGIL_BG_ACTIVE)
+                    .background(UITextures.SIGIL_BG)
+                    .hoverBackground(UITextures.SIGIL_BG_ACTIVE)
                     .length(5)
-                    .overlay(new DynamicDrawable(() -> SigilIcons.getSigil(chevron1.getIntValue()))));
+                    .overlay(new DynamicDrawable(() -> UITextures.getSigil(chevron1.getIntValue()))));
             sigils.child(
                 new CycleButtonWidget().syncHandler("chevron2")
                     .size(16, 16)
-                    .background(SigilIcons.SIGIL_BG)
-                    .hoverBackground(SigilIcons.SIGIL_BG_ACTIVE)
+                    .background(UITextures.SIGIL_BG)
+                    .hoverBackground(UITextures.SIGIL_BG_ACTIVE)
                     .length(5)
-                    .overlay(new DynamicDrawable(() -> SigilIcons.getSigil(chevron2.getIntValue()))));
+                    .overlay(new DynamicDrawable(() -> UITextures.getSigil(chevron2.getIntValue()))));
             sigils.child(
                 new CycleButtonWidget().syncHandler("chevron3")
                     .size(16, 16)
-                    .background(SigilIcons.SIGIL_BG)
-                    .hoverBackground(SigilIcons.SIGIL_BG_ACTIVE)
+                    .background(UITextures.SIGIL_BG)
+                    .hoverBackground(UITextures.SIGIL_BG_ACTIVE)
                     .length(5)
-                    .overlay(new DynamicDrawable(() -> SigilIcons.getSigil(chevron3.getIntValue()))));
+                    .overlay(new DynamicDrawable(() -> UITextures.getSigil(chevron3.getIntValue()))));
             sigils.child(
                 new CycleButtonWidget().syncHandler("chevron4")
                     .size(16, 16)
-                    .background(SigilIcons.SIGIL_BG)
-                    .hoverBackground(SigilIcons.SIGIL_BG_ACTIVE)
+                    .background(UITextures.SIGIL_BG)
+                    .hoverBackground(UITextures.SIGIL_BG_ACTIVE)
                     .length(5)
-                    .overlay(new DynamicDrawable(() -> SigilIcons.getSigil(chevron4.getIntValue()))));
+                    .overlay(new DynamicDrawable(() -> UITextures.getSigil(chevron4.getIntValue()))));
             sigils.child(
                 new CycleButtonWidget().syncHandler("chevron5")
                     .size(16, 16)
-                    .background(SigilIcons.SIGIL_BG)
-                    .hoverBackground(SigilIcons.SIGIL_BG_ACTIVE)
+                    .background(UITextures.SIGIL_BG)
+                    .hoverBackground(UITextures.SIGIL_BG_ACTIVE)
                     .length(5)
-                    .overlay(new DynamicDrawable(() -> SigilIcons.getSigil(chevron5.getIntValue()))));
+                    .overlay(new DynamicDrawable(() -> UITextures.getSigil(chevron5.getIntValue()))));
             sigils.child(
                 new CycleButtonWidget().syncHandler("chevron6")
                     .size(16, 16)
-                    .background(SigilIcons.SIGIL_BG)
-                    .hoverBackground(SigilIcons.SIGIL_BG_ACTIVE)
+                    .background(UITextures.SIGIL_BG)
+                    .hoverBackground(UITextures.SIGIL_BG_ACTIVE)
                     .length(5)
-                    .overlay(new DynamicDrawable(() -> SigilIcons.getSigil(chevron6.getIntValue()))));
+                    .overlay(new DynamicDrawable(() -> UITextures.getSigil(chevron6.getIntValue()))));
             sigils.child(
                 new CycleButtonWidget().syncHandler("chevron7")
                     .size(16, 16)
-                    .background(SigilIcons.SIGIL_BG)
-                    .hoverBackground(SigilIcons.SIGIL_BG_ACTIVE)
+                    .background(UITextures.SIGIL_BG)
+                    .hoverBackground(UITextures.SIGIL_BG_ACTIVE)
                     .length(5)
-                    .overlay(new DynamicDrawable(() -> SigilIcons.getSigil(chevron7.getIntValue()))));
+                    .overlay(new DynamicDrawable(() -> UITextures.getSigil(chevron7.getIntValue()))));
+
+            panel.child(
+                new ButtonWidget<>().marginTop(48)
+                    .marginLeft(8)
+                    .size(18, 18)
+                    .tooltip(t -> t.add("Generate a random unused address"))
+                    .overlay(UITextures.OVERLAY_RANDOM));
+
+            panel.child(
+                IKey.dynamic(() -> isUnique.getBoolValue() ? "Address is available" : "Address already in use")
+                    .asWidget()
+                    .marginLeft(36)
+                    .marginTop(52));
+
+            panel.child(
+                new ButtonWidget<>().marginTop(48)
+                    .marginLeft(148)
+                    .size(18, 18)
+                    .tooltip(t -> t.add("Lock in stargate address"))
+                    .setEnabledIf(ignored -> isUnique.getBoolValue())
+                    .overlay(UITextures.OVERLAY_CHECK)
+                    .onMousePressed(ignored -> {
+                        reg.register(new StargateAddress(address), new BlockPos(xCoord, yCoord, zCoord));
+                        hasAddress = true;
+                        return true;
+                    }));
+
         }
         return panel;
     }
+
 }

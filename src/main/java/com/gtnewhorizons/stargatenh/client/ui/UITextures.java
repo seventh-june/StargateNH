@@ -3,7 +3,10 @@ package com.gtnewhorizons.stargatenh.client.ui;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizons.stargatenh.StargateNH;
 
-public class SigilIcons {
+public class UITextures {
+
+    public static final UITexture OVERLAY_CHECK = UITexture.fullImage(StargateNH.MODID, "gui/checkmark");
+    public static final UITexture OVERLAY_RANDOM = UITexture.fullImage(StargateNH.MODID, "gui/random");
 
     public static final UITexture SIGIL_BG = UITexture.fullImage(StargateNH.MODID, "gui/sigil_bg");
     public static final UITexture SIGIL_BG_ACTIVE = UITexture.fullImage(StargateNH.MODID, "gui/sigil_bg_active");
