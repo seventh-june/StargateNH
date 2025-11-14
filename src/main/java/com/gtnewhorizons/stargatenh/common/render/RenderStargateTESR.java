@@ -8,6 +8,8 @@ import net.minecraftforge.client.model.IModelCustom;
 
 import org.lwjgl.opengl.GL11;
 
+import com.gtnewhorizons.stargatenh.common.tileentity.TileStargateController;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -25,12 +27,24 @@ public class RenderStargateTESR extends TileEntitySpecialRenderer {
 
     @Override
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks) {
+        if (!(te instanceof TileStargateController controller)) return;
+        int facing = controller.facing;
+        if (facing == -1) facing = controller.setFacing();
+
         GL11.glPushMatrix();
 
         GL11.glTranslated(x + 0.5, y, z + 0.5);
         bindTexture(TEXTURE);
 
-        GL11.glRotatef(180, 0, 1, 0);
+        float angle = switch (facing) {
+            case 4 -> 90F;
+            case 3 -> 180F;
+            case 2 -> -90F;
+            default -> 0F;
+        };
+
+        GL11.glRotatef(angle, 0F, 1F, 0F);
+
         GL11.glScalef(1.0F, 1.0F, 1.0F);
 
         GL11.glEnable(GL11.GL_LIGHTING);

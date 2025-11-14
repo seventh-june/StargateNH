@@ -23,7 +23,7 @@ public class BlockFormedGate extends BlockContainer {
 
     @Override
     public boolean hasTileEntity(int metadata) {
-        return metadata == 2;
+        return metadata > 1;
     }
 
     @Override
@@ -52,7 +52,7 @@ public class BlockFormedGate extends BlockContainer {
             ItemStack drop = switch (meta) {
                 case 0 -> new ItemStack(ModBlocks.stargateBlock, 1, 0);
                 case 1 -> new ItemStack(ModBlocks.stargateBlock, 1, 1);
-                case 2 -> new ItemStack(ModBlocks.stargateBlock, 1, 2);
+                case 2 -> new ItemStack(ModBlocks.stargateControllerBlock, 1, 0);
                 default -> null;
             };
 

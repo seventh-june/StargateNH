@@ -3,6 +3,7 @@ package com.gtnewhorizons.stargatenh;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.gtnewhorizons.stargatenh.common.tileentity.TileDialingDevice;
 import com.gtnewhorizons.stargatenh.common.tileentity.TileStargateController;
 
 import cpw.mods.fml.common.Mod;
@@ -32,6 +33,7 @@ public class StargateNH {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         GameRegistry.registerTileEntity(TileStargateController.class, "TileEntityStargateControllerNH");
+        GameRegistry.registerTileEntity(TileDialingDevice.class, "TileDialingDeviceNH");
         proxy.init(event);
     }
 
