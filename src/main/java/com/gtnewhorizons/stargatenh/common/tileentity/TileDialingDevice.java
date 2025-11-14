@@ -1,5 +1,7 @@
 package com.gtnewhorizons.stargatenh.common.tileentity;
 
+import java.util.Random;
+
 import net.minecraft.tileentity.TileEntity;
 
 import com.cleanroommc.modularui.api.IGuiHolder;
@@ -10,6 +12,7 @@ import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.screen.UISettings;
 import com.cleanroommc.modularui.value.sync.BooleanSyncValue;
 import com.cleanroommc.modularui.value.sync.IntSyncValue;
+import com.cleanroommc.modularui.value.sync.InteractionSyncHandler;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
 import com.cleanroommc.modularui.widgets.ButtonWidget;
 import com.cleanroommc.modularui.widgets.CycleButtonWidget;
@@ -142,7 +145,20 @@ public class TileDialingDevice extends TileEntity implements IGuiHolder<PosGuiDa
                     .marginLeft(8)
                     .size(18, 18)
                     .tooltip(t -> t.add("Generate a random unused address"))
-                    .overlay(UITextures.OVERLAY_RANDOM));
+                    .overlay(UITextures.OVERLAY_RANDOM)
+                    .syncHandler(new InteractionSyncHandler().setOnMousePressed(mouseData -> {
+                        Random rng = new Random();
+                        do {
+                            chevron1.setIntValue(rng.nextInt(5));
+                            chevron2.setIntValue(rng.nextInt(5));
+                            chevron3.setIntValue(rng.nextInt(5));
+                            chevron4.setIntValue(rng.nextInt(5));
+                            chevron5.setIntValue(rng.nextInt(5));
+                            chevron6.setIntValue(rng.nextInt(5));
+                            chevron7.setIntValue(rng.nextInt(5));
+                            isUnique.updateCacheFromSource(false);
+                        } while (!isUnique.getBoolValue());
+                    })));
 
             panel.child(
                 IKey.dynamic(() -> isUnique.getBoolValue() ? "Address is available" : "Address already in use")
@@ -157,12 +173,11 @@ public class TileDialingDevice extends TileEntity implements IGuiHolder<PosGuiDa
                     .tooltip(t -> t.add("Lock in stargate address"))
                     .setEnabledIf(ignored -> isUnique.getBoolValue())
                     .overlay(UITextures.OVERLAY_CHECK)
-                    .onMousePressed(ignored -> {
+                    .syncHandler(new InteractionSyncHandler().setOnMousePressed(mouseData -> {
                         reg.register(new StargateAddress(address), new BlockPos(xCoord, yCoord, zCoord));
                         hasAddress = true;
-                        return true;
-                    }));
-
+                        panel.closeIfOpen();
+                    })));
         }
         return panel;
     }
